@@ -1,0 +1,8 @@
+services:
+    app:
+        build: .
+        ports:
+           - "2103:8501"   
+        volumes:
+           - ./main.py:/app/main.py
+        

@@ -22,4 +22,19 @@ jobs:
         run: docker build -t user2103/garbage-detection-app:${{vars.VERSION}} .
 
       - name: Push to Dockerhub
-        run: docker push user2103/garbage-detection-app:${{vars.VERSION}}       
+        run: docker push user2103/garbage-detection-app:${{vars.VERSION}}
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOST_IP }} 
+          username: "ubuntu"
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull user2103/garbage-detection-app:${{vars.VERSION}}
+            docker stop garbage-detection-app || true
+            docker rm garbage-detection-app || true
+            docker run -d --name garbage-detection-app -p 2103:8501 user2103/garbage-detection-app:${{vars.VERSION}}
+            docker image prune -a -f
+
+          

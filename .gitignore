@@ -2,7 +2,6 @@ venv/
 datasets/
 runs
 __pycache__/
-*.pt
 
 src
 text

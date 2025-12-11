@@ -3,6 +3,7 @@ name: Docker Imgane CI
 on:
   push:
     branches: ['main']
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -10,18 +11,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Login Dockerhub
+      - name: Login to Dockerhub
         env: 
           DOCKER_USERNAME: ${{secret.DOCKER_USERNAME}}
           DOCKER_PASSWORD: ${{secret.DOCKER_PASSWORD}}
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
-      - name: Build Docker Image
-        run: docker compose up --build
+      - name: Build Docker Image using Docker Compose
+        run: docker build -t user2103/garbage-detection-app:${{vars.VERSION}}
 
       - name: Push to Dockerhub
-        run: docker push user2103/garbage-detection
+        run: docker push user2103/garbage-detection-app:${{vars.VERSION}}
        
-      
-
-      

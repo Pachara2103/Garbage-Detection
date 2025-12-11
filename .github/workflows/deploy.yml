@@ -25,9 +25,9 @@ jobs:
             echo "Deploying version: ${{ inputs.version }}"
             sudo docker pull user2103/garbage-detection-app:${{ inputs.version }}
 
+            sudo docker stop garbage-detection-app || true
+            
             sudo docker run -d --name garbage-detection-app -p 2103:8501 user2103/garbage-detection-app:${{ inputs.version }}
 
-            sudo docker stop garbage-detection-app || true
-            sudo docker rm garbage-detection-app || true
             
-            sudo docker image prune -a -f
+            

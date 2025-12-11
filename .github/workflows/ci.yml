@@ -19,7 +19,7 @@ jobs:
         run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
 
       - name: Build Docker Image
-        run: docker build -t user2103/garbage-detection-app:${{vars.VERSION}}
+        run: docker build -t user2103/garbage-detection-app:${{vars.VERSION}} .
 
       - name: Push to Dockerhub
         run: docker push user2103/garbage-detection-app:${{vars.VERSION}}       

@@ -1,1 +1,1 @@
-# Garbage Detection ttt
+# Garbage Detection tttt

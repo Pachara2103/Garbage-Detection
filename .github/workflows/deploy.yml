@@ -1,0 +1,30 @@
+name: Manual Deploy to EC2
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_version:
+        description: 'ระบุ Version ที่จะ Deploy (เช่น v1.0)'
+        required: true
+        default: 'latest'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOST_IP }} 
+          username: "ubuntu"
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            echo "Deploying version: ${{ inputs.target_version }}"
+            docker pull user2103/garbage-detection-app:${{ inputs.target_version }}
+
+            docker stop garbage-detection-app || true
+            docker rm garbage-detection-app || true
+            
+            docker run -d --name garbage-detection-app -p 2103:8501 user2103/garbage-detection-app:${{ inputs.target_version }}
+            
+            docker image prune -a -f
